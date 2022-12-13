@@ -27,12 +27,12 @@ Model::~Model() {
 
 }
 
-GameObject *Model::GetGameObjectPtr(int id) {
+GameObject *Model::getGameObjPtr(int id) {
     objitr = next(object_ptrs.begin(), id);
     return *objitr;
 }
 
-GameObject *Model::GetActiveGameObjectPtr(int id) {
+GameObject *Model::getActvGameObjPtr(int id) {
     objitr = next(active_ptrs.begin(), id);
     return *objitr;
 }
@@ -61,12 +61,23 @@ WildPokemon *Model::GetWildPokemonPtr(int id) {
 
 bool Model::IsValidId(int id, char c) {
     for (int i = 0; i < object_ptrs.size(); i++) {
-        if (GetGameObjectPtr(i)->getId() == id &&
-            tolower(GetGameObjectPtr(i)->getCode(), locale()) == tolower(c, locale())) {
+        if (getGameObjPtr(i)->getId() == id &&
+            tolower(getGameObjPtr(i)->getCode(), locale()) == tolower(c, locale())) {
             return true;
         }
     }
     return false;
+}
+
+void Model::ShowStatus() {
+
+    for (int i = 0; i < object_ptrs.size(); i++) {
+        getGameObjPtr(i)->ShowStatus();
+    }
+}
+
+void Model::destructObject() {
+    this->Model::~Model();
 }
 
 
@@ -91,7 +102,7 @@ bool Model::Update() {
 
     for (int i = 0; i < active_ptrs.size(); i++) {
 
-        if (GetActiveGameObjectPtr(i)->Update()) {
+        if (getActvGameObjPtr(i)->Update()) {
 
             test = true;
 
@@ -115,7 +126,7 @@ bool Model::Update() {
 
     if (num_gyms_defeated >= gym_ptrs.size()) {//if num gyms deafeated is equal to number of gyms to begin with
 
-        cout << "GAME OVER: You win! All battles done!" << endl;
+        cout << "GAME OVER: You win!!! All battles done!!!" << endl;
         destructObject();//destructObject
         exit(0);//exit game
     }
@@ -127,37 +138,27 @@ bool Model::Update() {
 
     }
     if (trainersDefeated >= trainer_ptrs.size()) {
-        cout << "GAME OVER: You lose! All of your Trainers' pokemon have fainted!" << endl;
+        cout << "GAME OVER: You lose!!! All of your Trainers' pokemon have fainted!" << endl;
         destructObject();
-        exit(0);
+        exit(0);//exit game
     }
     for (int i = 0; i < active_ptrs.size(); i++) {
-        if (GetActiveGameObjectPtr(i)->getState() == FAINTED) {
+        if (getActvGameObjPtr(i)->getState() == FAINTED) {
             objitr = next(active_ptrs.begin(), i);
-            cout << "Removing fainted " << GetActiveGameObjectPtr(i)->getId() << endl;
+            cout << "Removing fainted " << getActvGameObjPtr(i)->getId() << endl;
             active_ptrs.erase(objitr);
         }
     }
     return test;
 }
 
-void Model::ShowStatus() {
-
-    for (int i = 0; i < object_ptrs.size(); i++) {
-        GetGameObjectPtr(i)->ShowStatus();
-    }
-}
-
-void Model::destructObject() {
-    this->Model::~Model();
-}
 
 void Model::Display(View &View) {
     ShowStatus();
     cout << "t: " << t << endl;
     View.Clear();
     for (int i = 0; i < active_ptrs.size(); i++) {
-        View.Plot(GetActiveGameObjectPtr(i));
+        View.Plot(getActvGameObjPtr(i));
     }
     View.Draw();
 }
@@ -165,6 +166,22 @@ void Model::Display(View &View) {
 void Model::NewCommand(char type, int id, Point2D p) {
 
     switch (type) {
+
+
+        case ('w'):
+            wild_ptrs.push_back(new WildPokemon("New WildPokemon!", 5, 50, false, id + 1, p));
+            wpitr = next(wild_ptrs.end(), -1);
+            object_ptrs.insert(object_ptrs.end(), wpitr, wild_ptrs.end());
+            active_ptrs.insert(active_ptrs.end(), wpitr, wild_ptrs.end());
+            break;
+
+
+        case ('t'):
+            trainer_ptrs.push_back(new Trainer("New Trainer!", id + 1, 'T', 2, p));
+            trainer_itr = next(trainer_ptrs.end(), -1);
+            object_ptrs.insert(object_ptrs.end(), trainer_itr, trainer_ptrs.end());
+            active_ptrs.insert(active_ptrs.end(), trainer_itr, trainer_ptrs.end());
+            break;
 
         case ('c'):
             center_ptrs.push_back(new PokemonCenter(id + 1, 1, 100, p));
@@ -180,19 +197,6 @@ void Model::NewCommand(char type, int id, Point2D p) {
             active_ptrs.insert(active_ptrs.end(), gym_itr, gym_ptrs.end());
             break;
 
-        case ('t'):
-            trainer_ptrs.push_back(new Trainer("New Trainer!", id + 1, 'T', 2, p));
-            trainer_itr = next(trainer_ptrs.end(), -1);
-            object_ptrs.insert(object_ptrs.end(), trainer_itr, trainer_ptrs.end());
-            active_ptrs.insert(active_ptrs.end(), trainer_itr, trainer_ptrs.end());
-            break;
-
-        case ('w'):
-            wild_ptrs.push_back(new WildPokemon("New WildPokemon!", 5, 50, false, id + 1, p));
-            wpitr = next(wild_ptrs.end(), -1);
-            object_ptrs.insert(object_ptrs.end(), wpitr, wild_ptrs.end());
-            active_ptrs.insert(active_ptrs.end(), wpitr, wild_ptrs.end());
-            break;
 
         default:
             break;

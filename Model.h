@@ -31,8 +31,8 @@ private:
 public:
     Model();
     ~Model();
-    GameObject* GetGameObjectPtr(int id);
-    GameObject* GetActiveGameObjectPtr(int id);
+    GameObject* getGameObjPtr(int id);
+    GameObject* getActvGameObjPtr(int id);
     Trainer* GetTrainerPtr(int d);
     PokemonCenter* GetPokemonCenterPtr(int id);
     PokemonGym* GetPokemonGymPtr(int id);

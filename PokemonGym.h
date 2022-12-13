@@ -31,7 +31,7 @@ public:
     unsigned int TrainPokemon(unsigned int battle_units);
     void setCode(char c);
     bool ShouldBeVisible();
-    bool update();
+    bool Update();
     bool passed();
     void ShowStatus();
     ~PokemonGym();

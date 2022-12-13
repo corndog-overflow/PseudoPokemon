@@ -3,14 +3,11 @@
 
 using namespace std;
 
-PokemonCenter::PokemonCenter()
-        :Building() {
-
+PokemonCenter::PokemonCenter():Building() {
     displayCode = 'C';
     potionsCap = 100;
     numPotionsRemaining = potionsCap;
     pkDollarCostPerPotion = 5;
-
     GameObject::state = POTIONS_AVAILABLE;
     cout << "PokemonCenter default constructed" << endl;
 
@@ -18,15 +15,51 @@ PokemonCenter::PokemonCenter()
 
 PokemonCenter::PokemonCenter(int in_id, double potion_cost, unsigned int potion_cap, Point2D in_loc)
         :Building('C', in_id, in_loc) {
-
-    pkDollarCostPerPotion = potion_cost;
     potionsCap = potion_cap;
     numPotionsRemaining = potionsCap;
+    pkDollarCostPerPotion = potion_cost;
 
     GameObject::state = POTIONS_AVAILABLE;
     cout << "Building constructed" << endl;
 
 }
+unsigned int PokemonCenter::DistributePotion(unsigned int potion_needed) {
+
+    if (numPotionsRemaining >= potion_needed) {
+
+        numPotionsRemaining = numPotionsRemaining - potion_needed;
+        return potion_needed;
+
+    }
+
+    else {
+
+        potion_needed = numPotionsRemaining;
+        numPotionsRemaining = 0;
+        return potion_needed;
+
+    }
+
+}
+
+bool PokemonCenter::Update() {
+
+    if (state == POTIONS_AVAILABLE) {
+
+        if (numPotionsRemaining == 0) {
+            GameObject::state = NO_POTIONS_AVAILABLE;
+            GameObject::displayCode = 'c';
+            cout << "PokemonCenter: " << getId() << " has ran out of potions!" << endl;
+            return true;
+        }
+        else {
+            GameObject::state = POTIONS_AVAILABLE;
+            return false;
+        }
+    }
+    return false;
+}
+
 
 bool PokemonCenter::HasPotions() {
 
@@ -72,51 +105,6 @@ double PokemonCenter::GetPokeDollarCost(unsigned int potion) {
 
 }
 
-unsigned int PokemonCenter::DistributePotion(unsigned int potion_needed) {
-
-    if (numPotionsRemaining >= potion_needed) {
-
-        numPotionsRemaining = numPotionsRemaining - potion_needed;
-        return potion_needed;
-
-    }
-
-    else {
-
-        potion_needed = numPotionsRemaining;
-        numPotionsRemaining = 0;
-        return potion_needed;
-
-    }
-
-}
-
-bool PokemonCenter::Update() {
-
-    if (state == POTIONS_AVAILABLE) {
-
-        if (numPotionsRemaining == 0) {
-
-            GameObject::state = NO_POTIONS_AVAILABLE;
-            GameObject::displayCode = 'c';
-
-            cout << "PokemonCenter: " << getId() << " has ran out of potions!" << endl;
-            return true;
-
-        }
-
-        else {
-
-            GameObject::state = POTIONS_AVAILABLE;
-            return false;
-
-        }
-
-    }
-
-    return false;
-
-}
 
 void PokemonCenter::ShowStatus() {
 

@@ -62,7 +62,7 @@ bool PokemonGym::passed() {
 
 }
 
-bool PokemonGym::update() {
+bool PokemonGym::Update() {
 
     if (state == NOT_DEFEATED) {
         if (numBattlesRemaining == 0) {

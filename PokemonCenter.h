@@ -19,12 +19,6 @@ public:
 
     bool HasPotions();
 
-    unsigned int GetNumPotionRemaining();
-
-    bool CanAffordPotion(unsigned int potion, double budget);
-
-    double GetPokeDollarCost(unsigned int potion);
-
     unsigned int DistributePotion(unsigned int potion_needed);
 
     bool Update();
@@ -34,6 +28,13 @@ public:
     bool ShouldBeVisible();
 
     ~PokemonCenter();
+
+    unsigned int GetNumPotionRemaining();
+
+    bool CanAffordPotion(unsigned int potion, double budget);
+
+    double GetPokeDollarCost(unsigned int potion);
+
 };
 
 enum PokemonCenterStates {
