@@ -21,6 +21,7 @@ Trainer::Trainer(char in_code)
 
 }
 
+
 Trainer::Trainer(std::string in_name,int in_id,char in_code,unsigned int in_speed, Point2D in_loc)
         :GameObject(in_loc, in_id, in_code) {
 
@@ -205,7 +206,7 @@ void Trainer::StartMovingToGym(PokemonGym * gym) {
 
 void Trainer::StartMovingToCenter(PokemonCenter* center) {
 
-    Point2D dest = (*center).getLocation();
+    Point2D dest = center->getLocation();
 
     if (state == IN_GYM) {
 
@@ -224,20 +225,15 @@ void Trainer::StartMovingToCenter(PokemonCenter* center) {
 
     if (location.x == dest.x && location.y == dest.y) {
 
-        cout << "(" << displayCode << "): " << " I’m already at Center: "<<(*center).getId() << endl;
-
+        cout << displayCode << " " << " I’m already at Center: "<<center->getId() << endl;
     }
-
     else if (state == FAINTED) {
-
-        cout << "(" << name << "): " << " is out of health and can't move " << endl;
-
+        cout <<  name << " " << " is out of health and can't move " << endl;
     }
-
     else {
 
         state = MOVING_TO_CENTER;
-        cout << "(" << displayCode << "): " << " On my way to Center:" << (*center).getId() << "" << endl;
+        cout << displayCode << " " << " On my way to Center:" << center->getId() << "" << endl;
 
     }
 
@@ -268,26 +264,21 @@ bool Trainer::ShouldBeVisible() {
 }
 
 void Trainer::StartBattling(unsigned int num_battles) {
-
-
-
     if (HasFainted()) {
-
         cout << displayCode << id_num << ": " << "My Pokemon have fainted so no more battles for me..." << endl;
     }
-    if (state != IN_GYM) {
-
+    if (state != IN_GYM|| current_gym == NULL || GetDistanceBetween(this->getLocation(), current_gym->getLocation())!=0) {
         cout << displayCode << id_num << ": " << "I can only battle in a PokemonGym!" << endl;
     }
-    else if (PokeDollars < (*current_gym).GetPokeDollarCost(num_battles)) {
+    else if (PokeDollars < (current_gym->GetPokeDollarCost(num_battles))) {
         cout << displayCode << id_num << ": " << "Not enough money for battles!" << endl;
     }
-    else if((*current_gym).passed()) {
+    else if(current_gym->passed()) {
         cout << displayCode << id_num << ": " << "Cannot battle! This PokemonGym has no more trainers to battle!" << endl;
     }
     else {
-        if (num_battles > (*current_gym).GetNumBattlesRemaining()) {
-            num_battles = (*current_gym).GetNumBattlesRemaining();
+        if (num_battles > current_gym->GetNumBattlesRemaining()) {
+            num_battles = current_gym->GetNumBattlesRemaining();
         }
         state = BATTLING_IN_GYM;
         battles_to_buy = num_battles;
@@ -302,61 +293,39 @@ void Trainer::ShowStatus() {
 
     cout << name << " status: " << endl;
     GameObject::ShowStatus();
-
     //  cout << name << " status:" << endl;
     cout << "Health: " << health << endl;
     cout << "PokeDollars: " << PokeDollars << endl;
     cout << "Experience: " << experience << endl;
-
     switch(state) {
-
         case (STOPPED):
-
             cout << " stopped\n" << endl;
             break;
-
         case (MOVING):
-
             cout << " moving at a speed of " << speed << " to destination " << destination << " at each step of delta " << delta << ".\n" << endl;
             break;
-
         case (MOVING_TO_GYM):
-
             cout << " heading to Gym" << (*current_gym).getId() << " at a speed of " << speed << " at each step of " << delta << ".\n" << endl;
             break;
-
         case (MOVING_TO_CENTER):
-
             cout << " heading to PokemonCenter " << (*current_center).getId() << " at a speed of " << speed << " at each step of " << delta << ".\n" << endl;
             break;
-
         case (IN_GYM):
-
             cout << " inside Gym" << (*current_gym).getId() << ".\n" << endl;
             break;
-
         case (AT_CENTER):
-
             cout << " inside PokemonCenter " << (*current_center).getId() << ".\n" << endl;
             break;
-
         case (BATTLING_IN_GYM):
-
             cout << " battling in PokemonGym " << (*current_gym).getId() << ".\n" << endl;
             break;
-
         case (RECOVERING_HEALTH):
-
             cout << " recovering health in PokemonCenter " << (*current_center).getId() << ".\n" << endl;
             break;
-
         case (FAINTED):
-
             cout << name << ": " << " is out of health and can't move!\n" << endl;
             break;
-
         default:
-
             break;
 
     }
@@ -512,37 +481,22 @@ void Trainer::Stop() {
 
 void Trainer::StartRecoveringHealth(unsigned int num_potions) {
 
-    if (state != AT_CENTER) {
-
+    if (state != AT_CENTER || current_center == NULL || GetDistanceBetween(current_center->getLocation(), this->location) != 0) {
         cout << displayCode << id_num << ": I can only recover at a Pokemon Center!" << endl;
-
     }
-
     else if (PokeDollars < (*current_center).GetPokeDollarCost(num_potions)) {
-
         cout << displayCode << id_num << ": Not enough money to recover health." << endl;
-
     }
-
     else if (current_center->GetNumPotionRemaining() < 1) {
-
         cout << displayCode << id_num << ": Cannot recover! No potion remaining in this Pokemon Center" << endl;
-
     }
-
     else {
-
         if (num_potions > (*current_center).GetNumPotionRemaining()) {
-
             num_potions = (*current_center).GetNumPotionRemaining();
-
         }
-
         state = RECOVERING_HEALTH;
         cout << displayCode << id_num << ": " << "Started recovering " << num_potions << " potions at Pokemon Center " << current_center->getId() << " " << endl;
         potions_to_buy = num_potions;
-
     }
-
 }
 
