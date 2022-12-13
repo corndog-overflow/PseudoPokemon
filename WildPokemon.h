@@ -8,9 +8,9 @@
 	using namespace std;
 	class WildPokemon: public GameObject {
         enum WildPokemonStates {
-            DEAD = 0,
-            IN_ENVIRONMENT = 1,
-            IN_TRAINER = 2,
+            DIED = 0,
+            INGRASS = 1,
+            FOLLOWING_TRAINER = 2,
 
         };
 	public:
@@ -22,6 +22,10 @@
 	  bool ShouldBeVisible();
 	  bool IsAlive();
 	  virtual ~WildPokemon();
+        bool get_variant();
+        bool get_in_combat();
+        double get_attack();
+        double get_health();
 	protected:
 	  double attack = 5;
 	  double health = 2;

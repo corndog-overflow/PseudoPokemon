@@ -5,21 +5,21 @@
 
 using namespace std;
 
-WildPokemon::WildPokemon(string name, double attack, double health, bool variant, int id, Point2D in_loc)
+WildPokemon::WildPokemon(string name, double attack, double health, bool var, int id, Point2D in_loc)
         :GameObject(in_loc, id, 'W') {
 
-    this->name = name;
     this->attack = attack;
     this->health = health;
     this->variant = variant;
-    state = IN_ENVIRONMENT;
+    this->name = name;
+    state = INGRASS;
 
     cout << "WildPokemon constructed" << endl;
 }
 void WildPokemon::follow(Trainer* t) {
-    if (state == IN_ENVIRONMENT) {
+    if (state == INGRASS) {
         current_trainer = t;
-        state = IN_TRAINER;
+        state = FOLLOWING_TRAINER;
     }
 }
 void WildPokemon::ShowStatus() {
@@ -29,27 +29,62 @@ void WildPokemon::ShowStatus() {
 
     switch(state) {
 
-        case ((char) DEAD):
+        case ((char) DIED):
 
             cout << displayCode << id_num << ": is dead!" << endl;
             break;
 
-        case ((char) IN_ENVIRONMENT):
+        case ((char) INGRASS):
 
             cout << displayCode << id_num << ": is in the grass!" << endl;
             break;
 
-        case ((char) IN_TRAINER):
+        case ((char) FOLLOWING_TRAINER):
 
             cout << displayCode << id_num << ": is following " << (*current_trainer).GetName() << endl;
             break;
     }
 
 }
+double WildPokemon::get_attack() {
 
+    return attack;
+
+}
+
+
+bool WildPokemon::get_variant() {
+
+    return variant;
+}
+
+
+double WildPokemon::get_health() {
+
+    return health;
+
+}
+
+bool WildPokemon::get_in_combat() {
+
+    if (state == FOLLOWING_TRAINER) {
+
+        in_combat = true;
+
+    }
+
+    else {
+
+        in_combat = false;
+
+    }
+
+    return in_combat;
+
+}
 
 bool WildPokemon::ShouldBeVisible() {
-    if (IsAlive() && state == IN_ENVIRONMENT) {
+    if (IsAlive() && state == INGRASS) {
         return true;
     }
     else {
@@ -59,18 +94,18 @@ bool WildPokemon::ShouldBeVisible() {
 }
 
 bool WildPokemon::Update() {
-    if (state == DEAD) {
+    if (state == DIED) {
         in_combat = false;
         return false;
     }
     if (!IsAlive()) {
-        state = DEAD;
+        state = DIED;
         return true;
     }
-    if (state == IN_ENVIRONMENT) {
+    if (state == INGRASS) {
         return false;
     }
-    if (state == IN_TRAINER) {
+    if (state == FOLLOWING_TRAINER) {
 
         health--;
         current_trainer->ReduceTrainerHealth(attack);
@@ -82,18 +117,13 @@ bool WildPokemon::Update() {
 
 
 bool WildPokemon::IsAlive() {
-
     if (health <= 0) {
-
-        state = DEAD;
+        state = DIED;
         return false;
     }
     else {
-
         return true;
-
     }
-
 }
 
 WildPokemon::~WildPokemon() {
