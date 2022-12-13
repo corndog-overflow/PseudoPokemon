@@ -15,24 +15,25 @@ using namespace std;
 int main() {
     View view;
     Model model;
+    unsigned int numpotions;
+    unsigned int numbattles;
     char input, inp_code;
     int ID;
     int x, y;
     int id1, id2;
-    unsigned int numpotions;
-    unsigned int numbattles;
-
-    while(true) {
+    bool loop_var = true;
+    cout<<"EC327: Introduction to Software Engineering"<<endl;
+    cout<<"Fall 2022"<<endl<<"Programming Assignment 3"<<endl;
+    cout<<"Sadman Kabir" << endl;
+    while(loop_var) {
         try {
             model.Display(view);
-            cout << "Enter a game command: " << endl;
-            input = get_char();
-
+            cout << "\nEnter command: " << endl;
+            cin>>input;
             switch(input) {
                 case 'm':
                     ID = get_valid_Int(model, 'T');
-                    x = getInteger();
-                    y = getInteger();
+                    cin >> x >> y;
                     DoMoveCommand(model, ID, Point2D(x, y));
                     break;
 
@@ -74,26 +75,21 @@ int main() {
                     break;
 
                 case 'q':
+                    loop_var= false;
                     model.destructObject();
+                    cout<<"Quit the game"<<endl;
                     exit(0);
                 case 'n':
-                    inp_code = get_char();
+                    inp_code = getInput();
                     ID = get_Int_For_ID(model, inp_code);
                     x = getInteger();
                     y = getInteger();
                     DoCreateCommand(model, tolower(inp_code, locale()), ID, Point2D(x, y));
                     break;
-
             }
-
         }
-
         catch (Invalid_Input& except) {
-
             cout << "Invalid input: " << except.msg_ptr << endl;
-
         }
-
     }
-    return 0;
 }

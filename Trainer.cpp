@@ -26,23 +26,21 @@ Trainer::Trainer(std::string in_name,int in_id,char in_code,unsigned int in_spee
 
     speed = in_speed;
     name = in_name;
-    //  cout << "ID: " << getId() << endl;
     cout << "Trainer constructed" << endl;
 
 }
 
 void Trainer::ReduceTrainerHealth(double attack) {
-
     health -= attack;
-
 }
 
 static double GetRandomAmountOfPokeDollars() {
-
-    double f = (double) (rand()%3);
-    return f;
-
+    srand(time(NULL));
+    double random_value;
+    random_value = (double)rand()/RAND_MAX*2.0;
+    return random_value;
 }
+
 
 Point2D Trainer::getLocation() {
 

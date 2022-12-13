@@ -3,7 +3,8 @@
 using namespace std;
 
 void DoMoveCommand(Model & model, int inputID, Point2D destination) {
-    cout << "Moving " << (model.GetTrainerPtr(inputID))->GetName() << " to " << destination << endl;
+    cout << "Moving " << (model.GetTrainerPtr(inputID))->GetName()
+    << " to " << destination << endl;
     (model.GetTrainerPtr(inputID))->StartMoving(destination);
     model.Update();
 }
@@ -11,7 +12,8 @@ void DoMoveCommand(Model & model, int inputID, Point2D destination) {
 void DoMoveToCenterCommand(Model & model, int trainer_id, int center_id) {
 
     cout << "Moving " << (model.GetTrainerPtr(trainer_id))->GetName()
-         << " to PokemonCenter: " << model.GetPokemonCenterPtr(center_id)->getId() << endl;
+         << " to PokemonCenter: " << model.GetPokemonCenterPtr(center_id)
+         ->getId() << endl;
     (model.GetTrainerPtr(trainer_id))->
     StartMovingToCenter(model.GetPokemonCenterPtr(center_id));
     model.Update();
@@ -19,9 +21,9 @@ void DoMoveToCenterCommand(Model & model, int trainer_id, int center_id) {
 
 void DoMoveToGymCommand(Model & model, int trainer_id, int gym_id) {
 
-    cout << "Moving " << (model.GetTrainerPtr(trainer_id))->GetName() << " to gym " <<
-                                                                                    model.GetPokemonGymPtr(
-                                                                                            gym_id)->getId() << endl;
+    cout << "Moving " << (model.
+    GetTrainerPtr(trainer_id))->GetName() << " to gym " <<
+    model.GetPokemonGymPtr(gym_id)->getId() << endl;
     (model.GetTrainerPtr(trainer_id))->
     StartMovingToGym(model.GetPokemonGymPtr(gym_id));
     model.Update();
@@ -57,17 +59,15 @@ void DoAdvanceCommand(Model& model, View& view) {
 
 void DoRunCommand(Model& model, View& view) {
 
-    int count;
+    int count = 0;
     cout << "Advancing to next event or 5 ticks" << endl;
     for (count = 0; count < 5; count++) {
-
         model.Update();
-
-    }
+    }//run command works now!
 
 }
 
-char get_char() {
+char getInput() {
 
     char c;
 
@@ -83,7 +83,7 @@ char get_char() {
 
 unsigned int getUnInt() {
     unsigned int d;
-    if (!(cin >> d)) {//if not expected variety
+    if (!(cin >> d)) {
         throw Invalid_Input("Expecting integer");
 
     }
@@ -125,7 +125,6 @@ int get_Int_For_ID(Model & model, char c) {
 
     }
     i--;
-
     return i;
 
 }

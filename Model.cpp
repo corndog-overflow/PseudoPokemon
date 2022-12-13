@@ -5,16 +5,15 @@ using namespace std;
 int t = 0;
 
 Model::Model() {
-
-    gym_ptrs = {new PokemonGym(10, 5, 2, 3, 1, Point2D(0, 0)), new PokemonGym(20, 5, 7.5, 4, 2, Point2D(5, 5))};
-    object_ptrs.insert(object_ptrs.begin(), gym_ptrs.begin(), gym_ptrs.end());
-    center_ptrs = {new PokemonCenter(1, 1, 100, Point2D(1, 20)), new PokemonCenter(2, 1, 100, Point2D(10, 20))};
     object_ptrs.insert(object_ptrs.begin(), center_ptrs.begin(), center_ptrs.end());
     wild_ptrs = {new WildPokemon("Rapidash", 5, 2, false, 1, Point2D(10, 12)),
                  new WildPokemon("Nidoking", 5, 2, false, 2, Point2D(15, 5))};
     object_ptrs.insert(object_ptrs.begin(), wild_ptrs.begin(), wild_ptrs.end());
     trainer_ptrs = {new Trainer("Ash", 1, 'T', 1, Point2D(5, 1)), new Trainer("Misty", 2, 'T', 2, Point2D(10, 1))};
     object_ptrs.insert(object_ptrs.begin(), trainer_ptrs.begin(), trainer_ptrs.end());
+    gym_ptrs = {new PokemonGym(10, 5, 2, 3, 1, Point2D(0, 0)), new PokemonGym(20, 5, 7, 4, 2, Point2D(5, 5))};
+    object_ptrs.insert(object_ptrs.begin(), gym_ptrs.begin(), gym_ptrs.end());
+    center_ptrs = {new PokemonCenter(1, 1, 100, Point2D(1, 20)), new PokemonCenter(2, 1, 100, Point2D(10, 20))};
     active_ptrs.insert(active_ptrs.begin(), object_ptrs.begin(), object_ptrs.end());
     cout << "Model default constructed" << endl;
 

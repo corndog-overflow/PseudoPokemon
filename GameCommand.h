@@ -13,7 +13,7 @@ void DoBattleCommand(Model &model, int t_id, unsigned int battles);
 void DoRecoverInCenterCommand(Model &model, int t_id, unsigned int potions_needed);
 void DoAdvanceCommand(Model &model, View &view);
 void DoRunCommand(Model &model, View &view);
-char get_char();
+char getInput();
 unsigned int getUnInt();
 int getInteger();
 void DoMoveCommand(Model &model, int inputID, Point2D destination);

@@ -27,4 +27,6 @@ add_executable(pa3_corndog_overflow
         Trainer.h
         Trainer.cpp
         main.cpp
-        WildPokemon.h WildPokemon.cpp Input_Handling.h)
+        WildPokemon.cpp
+        WildPokemon.h
+        Input_Handling.h)

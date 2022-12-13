@@ -29,41 +29,6 @@ void WildPokemon::follow(Trainer* t) {
 
 }
 
-bool WildPokemon::get_variant() {
-
-    return variant;
-
-}
-
-double WildPokemon::get_attack() {
-
-    return attack;
-
-}
-
-double WildPokemon::get_health() {
-
-    return health;
-
-}
-
-bool WildPokemon::get_in_combat() {
-
-    if (state == IN_TRAINER) {
-
-        in_combat = true;
-
-    }
-
-    else {
-
-        in_combat = false;
-
-    }
-
-    return in_combat;
-
-}
 
 bool WildPokemon::ShouldBeVisible() {
 
