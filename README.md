@@ -1,6 +1,6 @@
 # PA4
 
-A simplified Pokemon like game run in terminal.
+A simplified Pokemon like game run in terminal for EC327.
 
 
 Created as a course assignment focused on demonstrating mastery of OOP principles.
